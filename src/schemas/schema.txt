@@ -1,0 +1,80 @@
+Cliente
+    - email
+    - senha
+    - nome
+    - tratamento?
+    - telefone?
+    - cpf?
+    - Endereço?
+    - data nascimento?
+    - cro?
+
+Endereço
+    - nome para entrega?
+    - rua
+    - numero
+    - estado
+    - pais
+    - cep
+    - numero de contato?
+
+Estados
+    - title
+
+Imagens
+    - nome
+    - link
+    - descrição?
+    - largura?
+    - altura?
+
+Produto
+    - titulo
+    - sub descrição?
+    - descrição?
+    - estoque
+    - Imagens
+    - SKU
+    - desconto?
+    - preço
+    - ProdutoOpções
+    - peso?
+    - ativo
+    - detalhes?
+    - aplicação?
+    - observações?
+
+Produto Opções
+    - produto id
+    - valor
+    - titulo
+    - type - color / tamanho / modelo / volume
+
+Marcas
+    - titulo
+    - descrição?
+
+Categorias
+    - titulo
+    - descrição?
+    - icone?
+    - Imagens?
+    - ativo?
+
+Sub Categorias
+    - titulo
+    - descrição?
+    - icone?
+    - Imagens?
+    - ativo?
+
+Carrinho
+    - produto
+    - quantidade
+
+Envio
+    - Endereço
+    - observações
+
+Pagamento
+    -

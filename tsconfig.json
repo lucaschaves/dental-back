@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "sourceMap": true,
+        "outDir": "dist",
+        "rootDir": "./src",
+        "strict": true,
+        "lib": ["esnext"],
+        "esModuleInterop": true,
+
+        /*Custom */
+        "target": "es2018",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "module": "commonjs",
+        "resolveJsonModule": true,
+        "allowJs": true,
+        "forceConsistentCasingInFileNames": true,
+        "strictPropertyInitialization": false,
+        "noImplicitAny": true,
+        "skipLibCheck": true
+    }
+}

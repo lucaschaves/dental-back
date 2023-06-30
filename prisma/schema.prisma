@@ -1,0 +1,203 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Customers {
+    id         String    @id @default(uuid())
+    email      String    @db.VarChar(255)
+    password   String    @db.VarChar(255)
+    name       String    @db.VarChar(255)
+    treatment  String?   @db.VarChar(50)
+    phone      String?   @db.VarChar(14)
+    cpf        String?   @db.VarChar(11)
+    birth_date DateTime?
+    cro        String?   @db.VarChar(50)
+    address_id String?
+    address    Address?  @relation(fields: [address_id], references: [id])
+    createdAt  DateTime? @default(now())
+    updatedAt  DateTime? @updatedAt
+
+    @@map("customers")
+}
+
+model Address {
+    id             String      @id @default(uuid())
+    address        String      @db.VarChar(500)
+    number         Int
+    zip_code       String      @db.VarChar(50)
+    state_id       String
+    state          State       @relation(fields: [state_id], references: [id])
+    name           String?     @db.VarChar(255)
+    contact_number String?     @db.VarChar(14)
+    customers      Customers[]
+    shipping       Shipping[]
+    createdAt      DateTime    @default(now())
+    updatedAt      DateTime    @updatedAt
+
+    @@map("address")
+}
+
+model State {
+    id        String    @unique
+    title     String    @db.VarChar(200)
+    address   Address[]
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+
+    @@map("state")
+}
+
+model Images {
+    id               String             @id @default(uuid())
+    name             String             @db.VarChar(500)
+    link             String             @db.VarChar(500)
+    description      String?            @db.VarChar(500)
+    width            Int?
+    height           Int?
+    products         Products[]
+    imagesOnProducts ImagesOnProducts[]
+    categories       Categories[]
+    subCategories    SubCategories[]
+    createdAt        DateTime           @default(now())
+    updatedAt        DateTime           @updatedAt
+
+    @@map("images")
+}
+
+model Products {
+    id                      String                    @id @default(uuid())
+    title                   String                    @db.VarChar(500)
+    sub_description         String?                   @db.VarChar(500)
+    description             String?                   @db.VarChar(500)
+    stock                   Int
+    images                  Images[]
+    sku                     String                    @unique @db.VarChar(255)
+    discount                Decimal?
+    price                   Decimal
+    product_options_id      String
+    weight                  Float?
+    active                  Boolean?                  @default(false)
+    details                 Json?
+    application             Json?
+    comments                Json?
+    imagesOnProducts        ImagesOnProducts[]
+    productsOptions         ProductsOptions[]
+    productOptionOnProducts ProductOptionOnProducts[]
+    cart                    Cart[]
+    createdAt               DateTime                  @default(now())
+    updatedAt               DateTime                  @updatedAt
+
+    @@map("products")
+}
+
+model ImagesOnProducts {
+    product    Products @relation(fields: [product_id], references: [id])
+    product_id String
+    images     Images   @relation(fields: [images_id], references: [id])
+    images_id  String
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    @@id([product_id, images_id])
+    @@map("images_on_products")
+}
+
+model ProductsOptions {
+    id                      String                    @id @default(uuid())
+    product_id              String
+    product                 Products                  @relation(fields: [product_id], references: [id])
+    value                   String                    @db.VarChar(255)
+    title                   String                    @db.VarChar(255)
+    type                    String                    @db.VarChar(50)
+    productOptionOnProducts ProductOptionOnProducts[]
+    createdAt               DateTime                  @default(now())
+    updatedAt               DateTime                  @updatedAt
+
+    @@map("products_options")
+}
+
+model ProductOptionOnProducts {
+    product_id         String
+    product            Products        @relation(fields: [product_id], references: [id])
+    product_options_id String
+    product_options    ProductsOptions @relation(fields: [product_options_id], references: [id])
+    createdAt          DateTime        @default(now())
+    updatedAt          DateTime        @updatedAt
+
+    @@id([product_id, product_options_id])
+    @@map("products_option_on_products")
+}
+
+model Brands {
+    id          String   @id @default(uuid())
+    title       String   @db.VarChar(255)
+    description String?  @db.VarChar(255)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@map("brands")
+}
+
+model Categories {
+    id          String   @id @default(uuid())
+    title       String   @db.VarChar(255)
+    description String?  @db.VarChar(255)
+    icon        String?  @db.VarChar(255)
+    images      Images   @relation(fields: [images_id], references: [id])
+    images_id   String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@map("categories")
+}
+
+model SubCategories {
+    id          String   @id @default(uuid())
+    title       String   @db.VarChar(255)
+    description String?  @db.VarChar(255)
+    icon        String?  @db.VarChar(255)
+    images      Images   @relation(fields: [images_id], references: [id])
+    images_id   String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@map("subcategories")
+}
+
+model Cart {
+    id          String   @id @default(uuid())
+    products    Products @relation(fields: [products_id], references: [id])
+    products_id String
+    amount      Int
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@map("cart")
+}
+
+model Shipping {
+    id         String   @id @default(uuid())
+    address_id String
+    address    Address  @relation(fields: [address_id], references: [id])
+    comments   String?
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    @@map("shipping")
+}
+
+model Payments {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("payments")
+}

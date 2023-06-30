@@ -1,0 +1,5 @@
+docker network create --driver bridge postgres-network
+
+docker run --name e-dental-postgres --network=postgres-network -e "POSTGRES_PASSWORD=edental" -p 5432:5432 -v /home/lucaschaves/Dental/PostgresSQL:/var/lib/postgresql/data -d postgres
+
+docker run --name e-dental-pgadmin --network=postgres-network -p 15432:80 -e "PGADMIN_DEFAULT_EMAIL=chaveslucas14@gmail.com" -e "PGADMIN_DEFAULT_PASSWORD=admin" -d dpage/pgadmin4
